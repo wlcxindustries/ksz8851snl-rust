@@ -1,0 +1,25 @@
+[package]
+name = "ksz8851snl"
+description = "Low level register descriptions and driver for the KSZ8851SNL SPI Ethernet controller"
+repository = "https://github.com/wlcx/ksz8851snl-rust"
+keywords = ["ksz8851snl", "ethernet", "driver", "microchip"]
+categories = ["embedded", "no-std"]
+version = "0.0.1"
+license = "MIT"
+edition = "2024"
+
+[dependencies]
+bondrewd = { version = "0.1.14", default-features = false, features = ["derive"] }
+bondrewd-derive = "0.3.18"
+bytemuck = "1.23.0"
+embedded-hal = "1.0.0"
+embedded-hal-async = "1.0.0"
+defmt = {version = "1.0.1", optional = true}
+embedded-registers = "0.9.12"
+device-driver = { version = "1.0.4", default-features = false, features = ["dsl"] }
+
+[features]
+# Currently *have* to use defmt because embedded-registers doesn't provide a way to turn it off
+default = ["defmt"]
+defmt = ["dep:defmt", "embedded-hal/defmt-03", "embedded-hal-async/defmt-03"]
+
