@@ -19,7 +19,7 @@ const CHIP_ID_FAMILY: u8 = 0x88;
 const CHIP_ID_CHIP: u8 = 0x7;
 
 /// Implements [`CodecAsync`] to allow use of [`SpiDeviceAsync`]
-struct KSZ8851Codec {}
+pub struct KSZ8851Codec {}
 
 impl CodecAsync for KSZ8851Codec {
     async fn read_register<R, I>(interface: &mut I) -> Result<R, I::Error>
@@ -104,7 +104,7 @@ impl<SE: spi::Error> From<SE> for Error {
 }
 pub struct Chip<SPI: SpiDevice, D: DelayNs> {
     delay: D,
-    dev: SpiDeviceAsync<SPI, KSZ8851Codec>,
+    pub dev: SpiDeviceAsync<SPI, KSZ8851Codec>,
     next_frame_id: u8,
 }
 
