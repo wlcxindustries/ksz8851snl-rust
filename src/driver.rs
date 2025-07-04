@@ -210,7 +210,7 @@ impl<SPI: SpiDevice, D: DelayNs> Chip<SPI, D> {
             .unwrap()
             .with_rx_frame_count_threshold_enable(true)
             //.with_rx_duration_timer_threshold_enable(true)
-            .with_rx_ip_header_two_byte_offset_enable(false)
+            .with_rx_ip_header_two_byte_offset_enable(true)
             .with_auto_dequeue_rxq_frame_enable(true);
         self.dev.write_register(rxqcr).await.unwrap();
 
@@ -222,7 +222,7 @@ impl<SPI: SpiDevice, D: DelayNs> Chip<SPI, D> {
             .with_receive_udp_frame_checksum_check_enable(false)
             .with_receive_tcp_frame_checksum_check_enable(false)
             .with_receive_ip_frame_checksum_check_enable(false)
-            .with_receive_flow_control_enable(false)
+            .with_receive_flow_control_enable(true)
             // You need broadcast for ARP!
             .with_receive_broadcast_enable(true)
             .with_receive_unicast_enable(true);
@@ -492,10 +492,15 @@ impl<SPI: SpiDevice, D: DelayNs> Chip<SPI, D> {
             .interface
             .transaction(&mut [
                 Operation::Write(&[(Opcode::RXRead as u8) << 6]),
+                // 4 dummy bytes
                 Operation::Read(&mut [0u8; 4]),
+                // Two status word bytes
                 Operation::Read(status.data_mut()),
+                // Two byte count bytes
                 Operation::Read(bc.data_mut()),
-                Operation::Read(&mut rx_buf[0..(byte_count - 4) as usize]),
+                // Two IP header offset bytes
+                Operation::Read(&mut [0u8; 2]),
+                Operation::Read(&mut rx_buf[0..(byte_count - 4 - 2) as usize]),
                 Operation::Read(crc),
                 Operation::Read(&mut discard[0..pad as usize]),
             ])
