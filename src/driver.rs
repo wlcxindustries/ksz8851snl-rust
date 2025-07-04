@@ -134,7 +134,8 @@ impl<SPI: SpiDevice, D: DelayNs> Chip<SPI, D> {
     /// - Resets the chip
     /// - Checks that it is what we think it is
     /// - Checks selftest registers
-
+    /// - Configures RX and TX functions
+    /// - Enables RX and TX
     pub async fn init(&mut self) -> Result<(), Error> {
         self.dev
             .write_register(GRR::zeroed().with_global_soft_reset(true))
@@ -363,9 +364,11 @@ impl<SPI: SpiDevice, D: DelayNs> Chip<SPI, D> {
 
         let byte_count: [u8; 2] = (buf.len() as u16).to_le_bytes();
 
-        let mut txc = TXCtrlWord::default();
-        txc.transmit_interrupt_on_completion = true;
-        txc.frame_id = self.next_frame_id;
+        let txc = TXCtrlWord {
+            transmit_interrupt_on_completion: true,
+            frame_id: self.next_frame_id,
+            ..Default::default()
+        };
 
         let _pad = (4 - (buf.len() % 4)) % 4;
         let pad = &mut [0u8; 3][0.._pad];

@@ -4,11 +4,10 @@ use embedded_registers::register;
 
 #[derive(BitfieldEnum, Clone, Debug, PartialEq, Eq, Default, Format)]
 #[bondrewd_enum(u8)]
-
 enum MDIXStatus {
     #[default]
-    MDIX = 0,
-    MDI = 1,
+    Mdix = 0,
+    Mdi = 1,
 }
 
 #[derive(BitfieldEnum, Clone, Debug, PartialEq, Eq, Default, Format)]
