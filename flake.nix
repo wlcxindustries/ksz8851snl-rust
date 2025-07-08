@@ -22,7 +22,7 @@
     devShells = forAllSystems (pkgs: {
       default = pkgs.mkShell {
         packages = with pkgs; [
-          (rust-bin.nightly.latest.default.override {
+          (rust-bin.stable.latest.default.override {
             extensions = [ "rust-src" ];
             targets = [ "riscv32imc-unknown-none-elf" ];
           })
