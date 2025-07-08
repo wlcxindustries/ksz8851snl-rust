@@ -9,13 +9,10 @@ license = "MIT"
 edition = "2024"
 
 [dependencies]
-bondrewd = { version = "0.1.14", default-features = false, features = ["derive"] }
-bondrewd-derive = "0.3.18"
-bytemuck = "1.23.0"
 embedded-hal = "1.0.0"
 embedded-hal-async = "1.0.0"
 defmt = {version = "1.0.1", optional = true}
-embedded-registers = "0.9.12"
+device-driver = { version = "1.0.6", default-features = false, features = ["defmt-03", "dsl"] }
 
 [features]
 # Currently *have* to use defmt because embedded-registers doesn't provide a way to turn it off
