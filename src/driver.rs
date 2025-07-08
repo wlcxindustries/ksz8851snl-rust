@@ -188,7 +188,10 @@ impl<SPI: SpiDevice, D: DelayNs> Chip<SPI, D> {
         // Auto enqueue involves setting TXQCR[2] at init time, and means you can (supposedly)
         // write multiple frames at once. According to errata this doesn't work reliably?
         // Manual enqueue involves setting TXQCR[0] *after* you've written the frame to transmit.
-        self.dev.txqcr().modify_async(|r| r.set_aetfe(true)).await?;
+        self.dev
+            .txqcr()
+            .modify_async(|r| r.set_aetfe(false))
+            .await?;
 
         self.dev.txcr().modify_async(|r| r.set_txe(true)).await?;
 
