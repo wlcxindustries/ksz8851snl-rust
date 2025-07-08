@@ -303,7 +303,7 @@ impl<SPI: SpiDevice, D: DelayNs> Chip<SPI, D> {
             .bus
             .transaction(&mut [
                 Operation::Write(&[(Opcode::TXWrite as u8) << 6]),
-                Operation::Write(&txc.get_inner_buffer()),
+                Operation::Write(txc.get_inner_buffer()),
                 Operation::Write(&byte_count),
                 Operation::Write(buf),
                 Operation::Write(pad),
