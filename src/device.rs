@@ -1033,7 +1033,7 @@ impl<BUS: embedded_hal_async::spi::SpiDevice> device_driver::AsyncRegisterInterf
         size_bits: u32,
         data: &[u8],
     ) -> Result<(), Self::Error> {
-        assert!(size_bits != 16);
+        assert!(size_bits == 16);
         self.bus
             .transaction(&mut [
                 Operation::Write(&reg_cmd(Opcode::RegWrite, address, 2)),
