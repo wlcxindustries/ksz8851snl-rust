@@ -264,6 +264,8 @@ impl<SPI: SpiDevice, D: DelayNs> Chip<SPI, D> {
             });
         }
         let available = self.dev.txmir().read_async().await?.txma();
+        #[cfg(feature = "defmt")]
+        defmt::debug!("TXMIR::txma (tx mem avail) = {}", available);
         if (tx_len + 4) > available.into() {
             // No room in the device's buffer currently
             self.dev

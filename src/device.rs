@@ -12,6 +12,7 @@ device_driver::create_device!(
             type DefaultFieldAccess = RO;
             type DefaultByteOrder = LE;
             type DefaultBitOrder = LSB0;
+            type DefmtFeature = "defmt";
         }
         /// Chip Configuration Register
         register CCR {
